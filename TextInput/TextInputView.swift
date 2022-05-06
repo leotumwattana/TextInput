@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextInputView: UIView {
+class TextInputView: UIScrollView {
 
     // MARK: UITextInput properties
     //
@@ -28,27 +28,42 @@ class TextInputView: UIView {
         return UITextInputStringTokenizer(textInput: self)
     }()
 
-    // MARK: TextKit stack
+    // MARK: TextKit2 stack
     //
-    let textStorage = NSTextStorage()
-    let layoutManager = NSLayoutManager()
-    let textContainer: NSTextContainer
+    let textContentStorage = NSTextContentStorage()
+    let textLayoutManager = NSTextLayoutManager()
+    let textContainer = NSTextContainer(size: .zero)
+    
+    private(set) var contentLayer: CALayer = TextLayer()
+    internal var fragmentLayerMap: NSMapTable<NSTextLayoutFragment, CALayer>
     
     // MARK: initializer
     //
     override init(frame: CGRect) {
-        textStorage.addLayoutManager(layoutManager)
-        textContainer = NSTextContainer(size: frame.size)
-        layoutManager.addTextContainer(textContainer)
         markedTextStyle = [NSAttributedString.Key.backgroundColor: UIColor.lightGray]
 
         // Test data
         let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)]
         let string = NSAttributedString(string: "1234567890", attributes: attributes)
-        textStorage.append(string)
-        //End
         
+        fragmentLayerMap = .weakToWeakObjects()
         super.init(frame: frame)
+        
+        textContentStorage.performEditingTransaction {
+            textContentStorage.textStorage?.insert(string, at: 0)
+        }
+        
+        layer.addSublayer(contentLayer)
+        
+        textContentStorage.delegate = self
+        textContentStorage.textStorage?.delegate = self
+        textContentStorage.addTextLayoutManager(textLayoutManager)
+        
+        textLayoutManager.delegate = self
+        textLayoutManager.textViewportLayoutController.delegate = self
+        
+        textContainer.widthTracksTextView = true
+        textLayoutManager.textContainer = textContainer
     }
 
     required init?(coder: NSCoder) {
@@ -67,17 +82,18 @@ class TextInputView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        textContainer.size = frame.size
+        updateTextContainerSize()
+        textLayoutManager
+            .textViewportLayoutController
+            .layoutViewport()
+        updateContentSizeIfNeeded()
     }
 
-    // MARK: Drawing the text
-    //
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        print("\(#function)")
-
-        let glyphRange = layoutManager.glyphRange(for: textContainer)
-        layoutManager.drawBackground(forGlyphRange: glyphRange, at: .zero)
-        layoutManager.drawGlyphs(forGlyphRange: glyphRange, at: .zero)
+    private func updateTextContainerSize() {
+        guard let textContainer = textLayoutManager.textContainer,
+              textContainer.size.width != bounds.width
+        else { return }
+        textContainer.size = CGSize(width: bounds.size.width, height: 0)
+        layer.setNeedsLayout()
     }
 }

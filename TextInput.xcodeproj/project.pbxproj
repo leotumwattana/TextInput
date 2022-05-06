@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3ADF8A37282327A400DA5C05 /* TextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A36282327A400DA5C05 /* TextLayer.swift */; };
+		3ADF8A39282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */; };
+		3ADF8A3B2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */; };
+		3ADF8A3D2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A3C2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift */; };
+		3ADF8A3F28232A7800DA5C05 /* TextInputView+TextViewportLayoutControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A3E28232A7800DA5C05 /* TextInputView+TextViewportLayoutControllerDelegate.swift */; };
+		3ADF8A4128232BC100DA5C05 /* TextLayoutFragmentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A4028232BC100DA5C05 /* TextLayoutFragmentLayer.swift */; };
+		3ADF8A4328238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A4228238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift */; };
+		3ADF8A452823903A00DA5C05 /* NSTextRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A442823903A00DA5C05 /* NSTextRange+Extensions.swift */; };
+		3ADF8A4728250C4C00DA5C05 /* NSRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A4628250C4C00DA5C05 /* NSRange+Extensions.swift */; };
+		3ADF8A492825181A00DA5C05 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A482825181A00DA5C05 /* String+Extensions.swift */; };
 		403D658925099B0700E6E464 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D658825099B0700E6E464 /* AppDelegate.swift */; };
 		403D658B25099B0700E6E464 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D658A25099B0700E6E464 /* SceneDelegate.swift */; };
 		403D658D25099B0700E6E464 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D658C25099B0700E6E464 /* ViewController.swift */; };
@@ -23,6 +33,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3ADF8A36282327A400DA5C05 /* TextLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayer.swift; sourceTree = "<group>"; };
+		3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextContentManagerDelegate.swift"; sourceTree = "<group>"; };
+		3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextStorageDelegate.swift"; sourceTree = "<group>"; };
+		3ADF8A3C2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextContentStorageDelegate.swift"; sourceTree = "<group>"; };
+		3ADF8A3E28232A7800DA5C05 /* TextInputView+TextViewportLayoutControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextViewportLayoutControllerDelegate.swift"; sourceTree = "<group>"; };
+		3ADF8A4028232BC100DA5C05 /* TextLayoutFragmentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayoutFragmentLayer.swift; sourceTree = "<group>"; };
+		3ADF8A4228238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextLayoutManagerDelegate.swift"; sourceTree = "<group>"; };
+		3ADF8A442823903A00DA5C05 /* NSTextRange+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextRange+Extensions.swift"; sourceTree = "<group>"; };
+		3ADF8A4628250C4C00DA5C05 /* NSRange+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+Extensions.swift"; sourceTree = "<group>"; };
+		3ADF8A482825181A00DA5C05 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		403D658525099B0700E6E464 /* TextInput.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextInput.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		403D658825099B0700E6E464 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		403D658A25099B0700E6E464 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +92,11 @@
 		403D658725099B0700E6E464 /* TextInput */ = {
 			isa = PBXGroup;
 			children = (
+				3ADF8A482825181A00DA5C05 /* String+Extensions.swift */,
+				3ADF8A4628250C4C00DA5C05 /* NSRange+Extensions.swift */,
+				3ADF8A442823903A00DA5C05 /* NSTextRange+Extensions.swift */,
+				3ADF8A3E28232A7800DA5C05 /* TextInputView+TextViewportLayoutControllerDelegate.swift */,
+				3ADF8A4028232BC100DA5C05 /* TextLayoutFragmentLayer.swift */,
 				406B57EC25157A3C006B1353 /* TextInput.entitlements */,
 				403D658825099B0700E6E464 /* AppDelegate.swift */,
 				403D658A25099B0700E6E464 /* SceneDelegate.swift */,
@@ -80,6 +105,11 @@
 				403D65A0250AA47A00E6E464 /* TextRange.swift */,
 				403D65A6250C566000E6E464 /* TextSelectionRect.swift */,
 				403D659C250AA40000E6E464 /* TextInputView.swift */,
+				3ADF8A4228238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift */,
+				3ADF8A3C2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift */,
+				3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */,
+				3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */,
+				3ADF8A36282327A400DA5C05 /* TextLayer.swift */,
 				403D65A2250C4E4900E6E464 /* TextInputView+KeyInput.swift */,
 				403D65A4250C4F1B00E6E464 /* TextInputView+TextInput.swift */,
 				403D658E25099B0700E6E464 /* Main.storyboard */,
@@ -161,12 +191,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ADF8A4728250C4C00DA5C05 /* NSRange+Extensions.swift in Sources */,
+				3ADF8A3F28232A7800DA5C05 /* TextInputView+TextViewportLayoutControllerDelegate.swift in Sources */,
+				3ADF8A4128232BC100DA5C05 /* TextLayoutFragmentLayer.swift in Sources */,
 				403D65A5250C4F1B00E6E464 /* TextInputView+TextInput.swift in Sources */,
 				403D658D25099B0700E6E464 /* ViewController.swift in Sources */,
 				403D65A3250C4E4900E6E464 /* TextInputView+KeyInput.swift in Sources */,
 				403D658925099B0700E6E464 /* AppDelegate.swift in Sources */,
 				403D65A1250AA47A00E6E464 /* TextRange.swift in Sources */,
 				403D659D250AA40000E6E464 /* TextInputView.swift in Sources */,
+				3ADF8A3D2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift in Sources */,
+				3ADF8A3B2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift in Sources */,
+				3ADF8A37282327A400DA5C05 /* TextLayer.swift in Sources */,
+				3ADF8A39282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift in Sources */,
+				3ADF8A492825181A00DA5C05 /* String+Extensions.swift in Sources */,
+				3ADF8A4328238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift in Sources */,
+				3ADF8A452823903A00DA5C05 /* NSTextRange+Extensions.swift in Sources */,
 				403D659F250AA45F00E6E464 /* TextPosition.swift in Sources */,
 				403D658B25099B0700E6E464 /* SceneDelegate.swift in Sources */,
 				403D65A7250C566000E6E464 /* TextSelectionRect.swift in Sources */,
@@ -319,7 +359,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 245B4P8J7P;
 				INFOPLIST_FILE = TextInput/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -340,7 +380,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 245B4P8J7P;
 				INFOPLIST_FILE = TextInput/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

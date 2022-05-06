@@ -21,18 +21,21 @@ extension TextInputView: UIKeyInput {
     }
     
     var hasText: Bool {
-        return textStorage.string.count > 0
+        return textContentStorage.textStorage?.string.isEmpty ?? true
     }
     
     func insertText(_ text: String) {
         print("\(#function)")
-        guard let rangeToReplace = (markedTextRange ?? selectedTextRange) as? TextRange,
+        guard let textStorage = textContentStorage.textStorage,
+            let rangeToReplace = (markedTextRange ?? selectedTextRange) as? TextRange,
             let nsRangeToReplace = rangeToReplace.nsRange(in: textStorage.string) else {
             return
         }
         let attributedText = NSAttributedString(string: text, attributes: typingAttributes)
         inputDelegate?.textWillChange(self)
-        textStorage.replaceCharacters(in: nsRangeToReplace, with: attributedText)
+        textContentStorage.performEditingTransaction {
+            textStorage.replaceCharacters(in: nsRangeToReplace, with: attributedText)
+        }
         markedTextRange = nil
         let newCursorPosition = TextPosition(position: rangeToReplace.start, offset: text.count)
         selectedTextRange = TextRange(start: newCursorPosition, end: newCursorPosition)
@@ -42,14 +45,17 @@ extension TextInputView: UIKeyInput {
     
     func deleteBackward() {
         print("\(#function)")
-        guard textStorage.string.count > 0 else { return }
+        guard let textStorage = textContentStorage.textStorage,
+            textStorage.string.count > 0 else { return }
 
         guard let rangeToReplace = (markedTextRange ?? selectedTextRange) as? TextRange,
             let nsRangeToRepalce = rangeToReplace.nsRange(in: textStorage.string) else {
             return
         }
         inputDelegate?.textWillChange(self)
-        textStorage.deleteCharacters(in: nsRangeToRepalce)
+        textContentStorage.performEditingTransaction {
+            textStorage.deleteCharacters(in: nsRangeToRepalce)
+        }
         markedTextRange = nil //?? Support the case of deleting a character of the marked text?
         selectedTextRange = TextRange(start: rangeToReplace.start, end: rangeToReplace.start)
         inputDelegate?.textDidChange(self)

@@ -26,3 +26,20 @@ class TextPosition: UITextPosition, Comparable {
         return lhs.value < rhs.value
     }
 }
+
+/*
+ Conform TextPosition to NSTextLocation so we can translate between
+ UITextInput and NSTextLocation (which TextKit2 uses).
+ */
+extension TextPosition: NSTextLocation {
+    func compare(_ location: NSTextLocation) -> ComparisonResult {
+        guard let to = location as? TextPosition else { fatalError() }
+        let from = self
+        if from.value < to.value {
+            return .orderedAscending
+        } else if from.value > to.value {
+            return .orderedDescending
+        }
+        return .orderedSame
+    }
+}

@@ -12,7 +12,8 @@ extension TextInputView: UITextInput {
     // MARK: Replacing and Returning Text
     //
     func text(in range: UITextRange) -> String? {
-        guard let textRange = range as? TextRange,
+        guard let textStorage = textContentStorage.textStorage,
+            let textRange = range as? TextRange,
             let indexRange = textRange.range(in: textStorage.string) else {
             return nil
         }
@@ -23,7 +24,8 @@ extension TextInputView: UITextInput {
     
     func replace(_ range: UITextRange, withText text: String) {
         print("\(#function): range = \(range), with text = \(text)")
-        guard let textRange = range as? TextRange,
+        guard let textStorage = textContentStorage.textStorage,
+              let textRange = range as? TextRange,
               let nsRange = textRange.nsRange(in: textStorage.string) else {
             fatalError("\(#function): Failed to convert \(range) to a valid NSRange.")
         }
@@ -33,7 +35,9 @@ extension TextInputView: UITextInput {
         // Note that TextRange is a half-open range without including the upper bound.
         //
         inputDelegate?.textWillChange(self)
-        textStorage.replaceCharacters(in: nsRange, with: text)
+        textContentStorage.performEditingTransaction {
+            textStorage.replaceCharacters(in: nsRange, with: text)
+        }
         inputDelegate?.textDidChange(self)
 
         let newEnd = TextPosition(position: textRange.start, offset: text.count)
@@ -51,20 +55,24 @@ extension TextInputView: UITextInput {
         //
         let rangeToReplace = markedTextRange ?? selectedTextRange
 
-        if let rangeToReplace = rangeToReplace as? TextRange,
-            let nsRange = rangeToReplace.nsRange(in: textStorage.string) {
-            inputDelegate?.textWillChange(self)
-            let newMarkedText = markedText ?? ""
-            textStorage.replaceCharacters(in: nsRange, with: newMarkedText)
-
-            let newEnd = TextPosition(position: rangeToReplace.start, offset: newMarkedText.count)
-            markedTextRange = TextRange(start: rangeToReplace.start, end: newEnd)
+        if let textStorage = textContentStorage.textStorage,
+           let rangeToReplace = rangeToReplace as? TextRange,
+           let nsRange = rangeToReplace.nsRange(in: textStorage.string)
+        {
+            textContentStorage.performEditingTransaction {
+                inputDelegate?.textWillChange(self)
+                let newMarkedText = markedText ?? ""
             
-            if let nsRange = (markedTextRange as! TextRange).nsRange(in: textStorage.string),
-               let markTextStyle = self.markedTextStyle {
-                textStorage.addAttributes(markTextStyle, range: nsRange)
+                textStorage.replaceCharacters(in: nsRange, with: newMarkedText)
+                let newEnd = TextPosition(position: rangeToReplace.start, offset: newMarkedText.count)
+                markedTextRange = TextRange(start: rangeToReplace.start, end: newEnd)
+                
+                if let nsRange = (markedTextRange as! TextRange).nsRange(in: textStorage.string),
+                   let markTextStyle = self.markedTextStyle {
+                    textStorage.addAttributes(markTextStyle, range: nsRange)
+                }
+                inputDelegate?.textDidChange(self)
             }
-            inputDelegate?.textDidChange(self)
         }
 
         // Now that the marked text or selected text is replaced, update selectedTextRange
@@ -91,10 +99,14 @@ extension TextInputView: UITextInput {
         guard let markedTextRange = self.markedTextRange as? TextRange else {
             return
         }
-        if let nsRange = markedTextRange.nsRange(in: textStorage.string) {
+        if let textStorage = textContentStorage.textStorage,
+           let nsRange = markedTextRange.nsRange(in: textStorage.string)
+        {
             inputDelegate?.textWillChange(self)
-            markedTextStyle?.keys.forEach { key in
-                textStorage.removeAttribute(key, range: nsRange)
+            textContentStorage.performEditingTransaction {
+                markedTextStyle?.keys.forEach { key in
+                    textStorage.removeAttribute(key, range: nsRange)
+                }
             }
             inputDelegate?.textDidChange(self)
         }
@@ -123,7 +135,7 @@ extension TextInputView: UITextInput {
     }
     
     var endOfDocument: UITextPosition {
-        return TextPosition(value: textStorage.string.count)
+        return TextPosition(value: textContentStorage.textStorage?.string.count ?? 0)
     }
     
     func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? {
@@ -136,6 +148,9 @@ extension TextInputView: UITextInput {
     
     func position(from position: UITextPosition, offset: Int) -> UITextPosition? {
         print("\(#function): from = \(position), offset = \(offset)")
+        guard let textStorage = textContentStorage.textStorage else {
+            fatalError()
+        }
         guard let position = position as? TextPosition else {
             fatalError("\(#function): The type of `position` isn't TextPosition.")
         }
@@ -171,6 +186,11 @@ extension TextInputView: UITextInput {
     func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult {
         print("\(#function): position = \(position), to = \(other)")
         guard let position = position as? TextPosition, let other = other as? TextPosition else {
+            /*
+             Note: Seems this gets triggered when the caret is at the end of the
+             document and we use the arrow up or down key to try to move the caret.
+             The property other will come bask as <uninitialized>.
+             */
             fatalError("\(#function): The type of `position` or `other` isn't TextPosition.")
         }
         if position < other {
@@ -244,63 +264,118 @@ extension TextInputView: UITextInput {
     //
     func firstRect(for range: UITextRange) -> CGRect {
         print("\(#function): range = \(range)")
+        
+        guard let textStorage = textContentStorage.textStorage
+        else { fatalError() }
+        
         guard let textRange = range as? TextRange else {
             fatalError("\(#function): The type of `range` isn't TextRange.")
         }
-        guard let nsRange = textRange.nsRange(in: textStorage.string) else {
-            print("! \(#function): TextRange.nsRange return nil for \(textRange).")
-            return .zero
+        
+        guard let nsRange = textRange.nsRange(in: textStorage.string)
+        else{ return .zero }
+        
+        guard let nsTextRange = NSTextRange(nsRange, in: textContentStorage)
+        else { return .zero }
+        
+        var rect = CGRect.zero
+        textLayoutManager.enumerateTextSegments(
+            in: nsTextRange,
+            type: .selection
+        ) { _, textSegmentFrame, baselinePosition, textContainer in
+            rect = convert(textSegmentFrame, to: nil)
+            return false
         }
-        let glyphRange = layoutManager.glyphRange(forCharacterRange: nsRange, actualCharacterRange: nil)
-        let boundingRect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
-        return boundingRect
+        
+        return rect
+    }
+    
+    var documentRange: NSTextRange {
+        textContentStorage.documentRange
     }
     
     func caretRect(for position: UITextPosition) -> CGRect {
         print("\(#function): position = \(position)")
-        guard let cursorPosition = position as? TextPosition else {
-            fatalError("\(#function): The type of `position` isn't TextPosition.")
-        }
-        // If textRange.nsRange returns nil, then `position` is out of bound.
-        // In that case, the caret position should be after the last character.
-        //
-        let textRange = TextRange(start: cursorPosition, end: cursorPosition)
-        var charRange = textRange.nsRange(in: textStorage.string)
-        if charRange == nil {
-            if textStorage.string.isEmpty { // No text yet, return default cusor rectangle.
-                return CGRect(x: 0, y: 0, width: 1, height: 20)
+        
+        let loc = offset(from: beginningOfDocument, to: position)
+        
+        var selectionFrame = CGRect(x: 0, y: 0, width: 3, height: 30)
+        
+        let nsRange = NSRange(location: loc, length: 0)
+        
+        guard let nsTextRange = NSTextRange(nsRange, in: textContentStorage)
+        else { return .zero }
+        
+        textLayoutManager.enumerateTextSegments(
+            in: nsTextRange,
+            type: .selection
+        ) { segmentRange, textSegmentFrame, baselinePosition, textContainer in
+                
+            selectionFrame = textSegmentFrame
+            if segmentRange == documentRange {
+                let font = UIFont.preferredFont(forTextStyle: .body)
+                let lineHeight = font.lineHeight
+                * NSParagraphStyle.default.lineHeightMultiple
+                selectionFrame = CGRect(
+                    origin: selectionFrame.origin,
+                    size: CGSize(
+                        width: selectionFrame.width,
+                        height: lineHeight
+                    )
+                )
             }
-            charRange = NSRange(location: textStorage.string.count - 1, length: 1)
+            
+            return false
         }
-        let glyphRange = layoutManager.glyphRange(forCharacterRange: charRange!, actualCharacterRange: nil)
-        var boundingRect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
-        if charRange == nil {
-            print("! \(#function): TextRange.nsRange return nil for \(textRange).")
-            let newX = boundingRect.origin.x + boundingRect.size.width
-            boundingRect.origin = CGPoint(x: newX, y: boundingRect.origin.y)
-        }
-        boundingRect.size.width = 1
-        print("\(#function): boundingRect = \(boundingRect)")
-        return boundingRect
+        
+        return CGRect(
+            x: selectionFrame.minX,
+            y: selectionFrame.minY,
+            width: 2,
+            height: selectionFrame.height
+        )
     }
     
     // MARK: Geometry Methods
     //
     func closestPosition(to point: CGPoint) -> UITextPosition? {
-        var fraction = CGFloat()
-        var charIndex = layoutManager.characterIndex(for: point, in: textContainer,
-                                                     fractionOfDistanceBetweenInsertionPoints: &fraction)
-        // Using NSString because String.count is different from NSString.length
-        // in that Swift string uses Extended Grapheme Clusters.
-        //
-        // charIndex == textStorage length: Allow the cursor to be at the position
-        // after the last character.
-        //
-        if fraction > 0.5 && charIndex < (textStorage.string as NSString).length {
-            charIndex += 1
+        guard let textStorage = textContentStorage.textStorage
+        else { return nil }
+        
+        let nav = textLayoutManager.textSelectionNavigation
+        
+        let selections = nav.textSelections(
+            interactingAt: point,
+            inContainerAt: textLayoutManager.documentRange.location,
+            anchors: [],
+            modifiers: .visual,
+            selecting: true,
+            bounds: .zero
+        )
+        
+        guard let firstSelection = selections.first,
+              let location = nav.resolvedInsertionLocation(
+                for: firstSelection,
+                writingDirection: .leftToRight
+              )
+        else { return nil }
+        
+        var index = textContentStorage.offset(
+            from: textLayoutManager.documentRange.location,
+            to: location
+        )
+        
+        // Check if leading character is a newline
+        let substring = textStorage.string.nsString.substring(from: index)
+        
+        if let character = substring.first,
+           character.isNewline,
+           index > 0
+        {
+            index -= 1
         }
-        print("\(#function): point = \(point), charIndex = \(charIndex), fraction = \(fraction)")
-        return TextPosition(value: charIndex)
+        
+        return TextPosition(value: index)
     }
     
     func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? {
@@ -333,23 +408,33 @@ extension TextInputView: UITextInput {
     
     func selectionRects(for range: UITextRange) -> [UITextSelectionRect] {
         print("\(#function): range = \(range)")
-        guard let range = range as? TextRange, let nsRange = range.nsRange(in: textStorage.string) else {
-            return []
-        }
-        var resultRects = [UITextSelectionRect]()
-        let glyphRange = layoutManager.glyphRange(forCharacterRange: nsRange, actualCharacterRange: nil)
-        layoutManager.enumerateEnclosingRects(forGlyphRange: glyphRange, withinSelectedGlyphRange: glyphRange,
-                                              in: textContainer) { rect, _ in
+        
+        guard let textStorage = textContentStorage.textStorage
+        else { fatalError() }
+        
+        guard let range = range as? TextRange else { fatalError() }
+        
+        guard let nsRange = range.nsRange(in: textStorage.string)
+        else { return [] }
+        
+        guard let textRange = NSTextRange(nsRange, in: textContentStorage)
+        else { return [] }
+        
+        var rects = [TextSelectionRect]()
+        
+        textLayoutManager.enumerateTextSegments(
+            in: textRange,
+            type: .selection
+        ) { textRange, textSegmentFrame, baselineOffset, textContainer in
+            let rect = textSegmentFrame
             let selectionRect = TextSelectionRect(rect: rect)
-            if selectionRect.rect.size.width == 0 {
-                selectionRect.selectionRect.size = CGSize(width: 1, height: selectionRect.rect.size.height)
-            }
-            resultRects.append(selectionRect)
+            rects.append(selectionRect)
+            return true
         }
-        if resultRects.count > 0 {
-            (resultRects[0] as! TextSelectionRect).rectContainsStart = true
-            (resultRects[resultRects.count - 1] as! TextSelectionRect).rectContainsEnd = true
-        }
-        return resultRects
+        
+        rects.first?.rectContainsStart = true
+        rects.last?.rectContainsEnd = true
+        
+        return rects
     }
 }

@@ -12,7 +12,6 @@ class ViewController: UIViewController {
 
     private var keyboardSubscriptions: AnyCancellable?
 
-    var scrollView: UIScrollView!
     var textInputView: TextInputView!
 
     override func viewDidLoad() {
@@ -20,35 +19,19 @@ class ViewController: UIViewController {
 
         textInputView = TextInputView()
         textInputView.backgroundColor = .systemYellow
-        textInputView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.keyboardDismissMode = .interactive
-        scrollView.addSubview(textInputView)
-        view.addSubview(scrollView)
-
-        // Set up auto layout constraints
-        //
-        NSLayoutConstraint.activate([
-            textInputView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            textInputView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            textInputView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            textInputView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
-        ])
+        view.addSubview(textInputView)
         
+        // Set up auto layout constraints
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 10),
-            scrollView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -10),
-            scrollView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 10),
-            scrollView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -10)
+            textInputView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 10),
+            textInputView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -10),
+            textInputView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 10),
+            textInputView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -10)
         ])
         
-        // Set up gesture recognizer.
-        //
-        //let selector = #selector(type(of: self).tapHandler(_:))
-        //let tapRecognizer = UITapGestureRecognizer(target: self, action: selector)
-        //textInputView.addGestureRecognizer(tapRecognizer)
+        textInputView.translatesAutoresizingMaskIntoConstraints = false
+        textInputView.keyboardDismissMode = .interactive
         
         let interaction = UITextInteraction(for: .editable)
         interaction.textInput = textInputView
@@ -73,18 +56,13 @@ class ViewController: UIViewController {
                 let keybardHeight = frame.cgRectValue.size.height
                 newContentInset = UIEdgeInsets(top: 0, left: 0, bottom: keybardHeight, right: 0)
             }
-            self.scrollView.contentInset = newContentInset
-            self.scrollView.contentSize = self.textInputView.frame.size
+            self.textInputView.contentInset = newContentInset
         }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         keyboardSubscriptions?.cancel() // Cancel the subscription.
-    }
-    
-    @objc public func tapHandler(_ sender: UITapGestureRecognizer) {
-        textInputView.becomeFirstResponder()
     }
 }
 
