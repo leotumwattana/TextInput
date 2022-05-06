@@ -17,6 +17,7 @@
 		3ADF8A452823903A00DA5C05 /* NSTextRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A442823903A00DA5C05 /* NSTextRange+Extensions.swift */; };
 		3ADF8A4728250C4C00DA5C05 /* NSRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A4628250C4C00DA5C05 /* NSRange+Extensions.swift */; };
 		3ADF8A492825181A00DA5C05 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A482825181A00DA5C05 /* String+Extensions.swift */; };
+		3ADF8A4B2825D0E800DA5C05 /* TextLayoutFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A4A2825D0E800DA5C05 /* TextLayoutFragment.swift */; };
 		403D658925099B0700E6E464 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D658825099B0700E6E464 /* AppDelegate.swift */; };
 		403D658B25099B0700E6E464 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D658A25099B0700E6E464 /* SceneDelegate.swift */; };
 		403D658D25099B0700E6E464 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D658C25099B0700E6E464 /* ViewController.swift */; };
@@ -43,6 +44,7 @@
 		3ADF8A442823903A00DA5C05 /* NSTextRange+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextRange+Extensions.swift"; sourceTree = "<group>"; };
 		3ADF8A4628250C4C00DA5C05 /* NSRange+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+Extensions.swift"; sourceTree = "<group>"; };
 		3ADF8A482825181A00DA5C05 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		3ADF8A4A2825D0E800DA5C05 /* TextLayoutFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayoutFragment.swift; sourceTree = "<group>"; };
 		403D658525099B0700E6E464 /* TextInput.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextInput.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		403D658825099B0700E6E464 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		403D658A25099B0700E6E464 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				403D659C250AA40000E6E464 /* TextInputView.swift */,
 				3ADF8A4228238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift */,
 				3ADF8A3C2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift */,
+				3ADF8A4A2825D0E800DA5C05 /* TextLayoutFragment.swift */,
 				3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */,
 				3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */,
 				3ADF8A36282327A400DA5C05 /* TextLayer.swift */,
@@ -205,6 +208,7 @@
 				3ADF8A37282327A400DA5C05 /* TextLayer.swift in Sources */,
 				3ADF8A39282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift in Sources */,
 				3ADF8A492825181A00DA5C05 /* String+Extensions.swift in Sources */,
+				3ADF8A4B2825D0E800DA5C05 /* TextLayoutFragment.swift in Sources */,
 				3ADF8A4328238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift in Sources */,
 				3ADF8A452823903A00DA5C05 /* NSTextRange+Extensions.swift in Sources */,
 				403D659F250AA45F00E6E464 /* TextPosition.swift in Sources */,
