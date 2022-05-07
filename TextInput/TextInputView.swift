@@ -37,6 +37,21 @@ class TextInputView: UIScrollView {
     private(set) var contentLayer: CALayer = TextLayer()
     internal var fragmentLayerMap: NSMapTable<NSTextLayoutFragment, CALayer>
     
+    // MARK: Floating Cursor
+    //
+    let floatingCursorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBlue
+        view.layer.cornerRadius = 1
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowRadius = 3
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    
+    internal var _caretRectForFloatingCursor: CGRect?
+    
     // MARK: initializer
     //
     override init(frame: CGRect) {

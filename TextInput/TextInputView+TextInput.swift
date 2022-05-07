@@ -438,3 +438,62 @@ extension TextInputView: UITextInput {
         return rects
     }
 }
+
+// =======================
+// MARK: - Floating Cursor
+// =======================
+
+extension TextInputView {
+    func beginFloatingCursor(at point: CGPoint) {
+        guard let position = closestPosition(to: point) else { return }
+        let caretRect = caretRect(for: position)
+        floatingCursorView.frame = caretRect
+        
+        floatingCursorView.layer.shadowOffset = CGSize(width: 0, height: caretRect.height / 2)
+        addSubview(floatingCursorView)
+        
+        _caretRectForFloatingCursor = caretRect
+        
+        let anim = UIViewPropertyAnimator(duration: 0.2, dampingRatio: 1) {
+            self.floatingCursorView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        }
+        anim.addCompletion { _ in
+            UIViewPropertyAnimator(duration: 0.2, dampingRatio: 1) {
+                self.floatingCursorView.transform = .identity
+            }.startAnimation()
+        }
+        anim.startAnimation()
+    }
+    
+    func updateFloatingCursor(at point: CGPoint) {
+        let frame = floatingCursorView.frame
+        let origin = CGPoint(
+            x: point.x - frame.width / 2,
+            y: point.y - frame.height / 2
+        )
+        floatingCursorView.frame.origin = origin
+        
+        if let position = closestPosition(to: point) {
+            let caretRect = caretRect(for: position)
+            _caretRectForFloatingCursor = caretRect
+        }
+    }
+    
+    func endFloatingCursor() {
+        if let caretRect = _caretRectForFloatingCursor {
+            let anim = UIViewPropertyAnimator(duration: 0.2, dampingRatio: 1) {
+                self.floatingCursorView.frame = caretRect
+            }
+            anim.addCompletion { _ in
+                self.floatingCursorView.removeFromSuperview()
+                self.floatingCursorView.transform = .identity
+            }
+            anim.startAnimation()
+            
+        } else {
+            floatingCursorView.removeFromSuperview()
+            floatingCursorView.transform = .identity
+        }
+        _caretRectForFloatingCursor = nil
+    }
+}
