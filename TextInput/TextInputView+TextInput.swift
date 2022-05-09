@@ -297,6 +297,8 @@ extension TextInputView: UITextInput {
     func caretRect(for position: UITextPosition) -> CGRect {
         print("\(#function): position = \(position)")
         
+        let caretWidth: CGFloat = 2
+        
         let loc = offset(from: beginningOfDocument, to: position)
         
         var selectionFrame = CGRect(x: 0, y: 0, width: 3, height: 30)
@@ -314,12 +316,12 @@ extension TextInputView: UITextInput {
             selectionFrame = textSegmentFrame
             if segmentRange == documentRange {
                 let font = UIFont.preferredFont(forTextStyle: .body)
-                let lineHeight = font.lineHeight
-                * NSParagraphStyle.default.lineHeightMultiple
+                let lineHeightMultiple = max(NSParagraphStyle.default.lineHeightMultiple, 1)
+                let lineHeight = font.lineHeight * lineHeightMultiple
                 selectionFrame = CGRect(
                     origin: selectionFrame.origin,
                     size: CGSize(
-                        width: selectionFrame.width,
+                        width: caretWidth,
                         height: lineHeight
                     )
                 )
@@ -331,7 +333,7 @@ extension TextInputView: UITextInput {
         return CGRect(
             x: selectionFrame.minX,
             y: selectionFrame.minY,
-            width: 2,
+            width: caretWidth,
             height: selectionFrame.height
         )
     }
