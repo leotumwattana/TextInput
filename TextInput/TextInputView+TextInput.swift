@@ -140,20 +140,21 @@ extension TextInputView: UITextInput {
     
     func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? {
         print("\(#function): from = \(fromPosition), to = \(toPosition)")
-        guard let start = fromPosition as? TextPosition,let end = toPosition as? TextPosition else {
-            fatalError("\(#function): The type of `fromPosition` or `toPosition` isn't TextPosition.")
-        }
+        guard let start = fromPosition as? TextPosition,
+              let end = toPosition as? TextPosition
+        else { return nil }
+        
         return start <= end ? TextRange(start: start, end: end) : TextRange(start: end, end: start)
     }
     
     func position(from position: UITextPosition, offset: Int) -> UITextPosition? {
         print("\(#function): from = \(position), offset = \(offset)")
-        guard let textStorage = textContentStorage.textStorage else {
-            fatalError()
-        }
-        guard let position = position as? TextPosition else {
-            fatalError("\(#function): The type of `position` isn't TextPosition.")
-        }
+        guard let textStorage = textContentStorage.textStorage
+        else { fatalError() }
+        
+        guard let position = position as? TextPosition
+        else { return nil }
+        
         let newPosition = TextPosition(position: position, offset: offset)
         if newPosition.value >= textStorage.string.count {
             return endOfDocument
@@ -166,9 +167,9 @@ extension TextInputView: UITextInput {
     
     func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? {
         print("\(#function): from = \(position),in = \(direction), offset = \(offset)")
-        guard let position = position as? TextPosition else {
-            return nil
-        }
+        guard let position = position as? TextPosition
+        else { return nil }
+        
         switch direction { // This sample only supports left-to-right text direction.
         case .right:
             let newPosition = TextPosition(position: position, offset: offset)
@@ -341,40 +342,52 @@ extension TextInputView: UITextInput {
     // MARK: Geometry Methods
     //
     func closestPosition(to point: CGPoint) -> UITextPosition? {
-        guard let textStorage = textContentStorage.textStorage
-        else { return nil }
-        
         let nav = textLayoutManager.textSelectionNavigation
         
+        guard let textLayoutFragment = textLayoutManager.textLayoutFragment(for: point)
+        else { return nil }
+
         let selections = nav.textSelections(
             interactingAt: point,
-            inContainerAt: textLayoutManager.documentRange.location,
+            inContainerAt: textLayoutFragment.rangeInElement.location,
             anchors: [],
             modifiers: .visual,
             selecting: true,
             bounds: .zero
         )
         
-        guard let firstSelection = selections.first,
-              let location = nav.resolvedInsertionLocation(
-                for: firstSelection,
-                writingDirection: .leftToRight
-              )
+        guard let selection = selections.first,
+              let location = selection.textRanges.first?.location
         else { return nil }
         
+        let beginningLocation = textLayoutManager.documentRange.location
+        
         var index = textContentStorage.offset(
-            from: textLayoutManager.documentRange.location,
+            from: beginningLocation,
             to: location
         )
         
-        // Check if leading character is a newline
-        let substring = textStorage.string.nsString.substring(from: index)
+        let minIndex = textContentStorage.offset(
+            from: beginningLocation,
+            to: textLayoutFragment.rangeInElement.location
+        )
         
-        if let character = substring.first,
-           character.isNewline,
-           index > 0
-        {
+        let maxIndex = textContentStorage.offset(
+            from: beginningLocation,
+            to: textLayoutFragment.rangeInElement.endLocation
+        )
+        
+        if index > maxIndex || index < minIndex {
+            return nil
+        }
+        
+        let string = textContentStorage.textStorage!.string
+        let s = string.index(string.startIndex, offsetBy: index)
+        let c = string[s]
+        
+        if c == "\n" {
             index -= 1
+            print("*** \(#function): minIndex: \(minIndex) maxIndex: \(maxIndex) index: \(index)")
         }
         
         return TextPosition(value: index)
