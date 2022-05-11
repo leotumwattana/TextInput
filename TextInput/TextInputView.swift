@@ -61,7 +61,8 @@ class TextInputView: UIScrollView {
 
         // Test data
         let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)]
-        let string = NSAttributedString(string: "1234567890", attributes: attributes)
+        let content = String(repeating: "1234567890\n", count: 50)
+        let string = NSAttributedString(string: content, attributes: attributes)
         
         fragmentRenderingSurfaceMap = .weakToWeakObjects()
         super.init(frame: frame)
