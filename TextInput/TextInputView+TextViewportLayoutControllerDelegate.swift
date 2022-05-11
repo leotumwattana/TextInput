@@ -21,34 +21,74 @@ extension TextInputView: NSTextViewportLayoutControllerDelegate {
         return visibleRect.insetBy(dx: 0, dy: -100)
     }
     
+    func textViewportLayoutControllerWillLayout(
+        _ textViewportLayoutController: NSTextViewportLayoutController
+    ) {
+        // Mark rendering surface layers as possible needing removal
+        contentLayer.sublayers?
+            .compactMap { $0 as? TextLayoutFragmentLayer }
+            .forEach { $0.shouldRemove = true }
+        
+        // Mark rendering surface views as possibly needing removal
+        subviews
+            .compactMap { $0 as? TextLayoutFragmentView }
+            .forEach { $0.shouldRemove = true }
+        CATransaction.begin()
+    }
+    
     func textViewportLayoutController(
         _ textViewportLayoutController: NSTextViewportLayoutController,
         configureRenderingSurfaceFor textLayoutFragment: NSTextLayoutFragment
     ) {
-        if let fragmentLayer = fragmentLayerMap.object(forKey: textLayoutFragment) as? TextLayoutFragmentLayer {
-            let oldFrame = fragmentLayer.frame
-            fragmentLayer.updateGeometry()
-            if oldFrame != fragmentLayer.frame {
-                fragmentLayer.setNeedsDisplay()
+        
+        let renderingSurface = fragmentRenderingSurfaceMap.object(
+            forKey: textLayoutFragment
+        )
+        
+        if let renderingSurface = renderingSurface as? TextLayoutFragmentView {
+            let oldFrame = renderingSurface.frame
+            renderingSurface.updateGeometry()
+            if oldFrame != renderingSurface.frame {
+                renderingSurface.setNeedsDisplay()
             }
-            contentLayer.addSublayer(fragmentLayer)
+            
+            /*
+             This is an existing view that we want to keep, so
+             mark it as not needing removal.
+             */
+            renderingSurface.shouldRemove = false
+
+        } else if let renderingSurface = renderingSurface as? TextLayoutFragmentLayer {
+            let oldFrame = renderingSurface.frame
+            renderingSurface.updateGeometry()
+            if oldFrame != renderingSurface.frame {
+                renderingSurface.setNeedsDisplay()
+            }
+            renderingSurface.shouldRemove = false
+            
         } else {
-            let fragmentLayer = TextLayoutFragmentLayer(layoutFragment: textLayoutFragment)
-            contentLayer.addSublayer(fragmentLayer)
-            fragmentLayerMap.setObject(fragmentLayer, forKey: textLayoutFragment)
+            let renderingSurface = TextLayoutFragmentView(layoutFragment: textLayoutFragment)
+            addSubview(renderingSurface)
+            fragmentRenderingSurfaceMap
+                .setObject(renderingSurface, forKey: textLayoutFragment)
         }
-    }
-    
-    func textViewportLayoutControllerWillLayout(
-        _ textViewportLayoutController: NSTextViewportLayoutController
-    ) {
-        contentLayer.sublayers = nil
-        CATransaction.begin()
     }
     
     func textViewportLayoutControllerDidLayout(
         _ textViewportLayoutController: NSTextViewportLayoutController
     ) {
+        
+        contentLayer.sublayers?
+            .compactMap { $0 as? RenderingSurface }
+            .filter { $0.shouldRemove }
+            .forEach { $0.remove() }
+        
+        // Remove any TextLayoutFragmentView that we no longer need.
+        subviews
+            .compactMap { $0 as? TextLayoutFragmentView }
+            .filter { $0.shouldRemove }
+            .forEach { $0.remove() }
+        
         CATransaction.commit()
         updateContentSizeIfNeeded()
         adjustViewportOffsetIfNeeded()

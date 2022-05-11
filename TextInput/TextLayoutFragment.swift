@@ -15,6 +15,7 @@ final class TextLayoutFragment: NSTextLayoutFragment {
     
     override var topMargin: CGFloat { 8 }
     override var bottomMargin: CGFloat { 8 }
+    override var leadingPadding: CGFloat { 20 }
     
     // ===============
     // MARK: - Drawing

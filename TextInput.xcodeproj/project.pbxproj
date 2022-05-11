@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A36C982282A6A75000D48CB /* TextLayoutFragmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C981282A6A75000D48CB /* TextLayoutFragmentView.swift */; };
+		3A36C984282A99FE000D48CB /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C983282A99FE000D48CB /* CheckboxView.swift */; };
+		3A36C989282AF469000D48CB /* RenderingSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C988282AF469000D48CB /* RenderingSurface.swift */; };
 		3ADF8A37282327A400DA5C05 /* TextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A36282327A400DA5C05 /* TextLayer.swift */; };
 		3ADF8A39282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */; };
 		3ADF8A3B2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */; };
@@ -34,6 +37,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A36C981282A6A75000D48CB /* TextLayoutFragmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayoutFragmentView.swift; sourceTree = "<group>"; };
+		3A36C983282A99FE000D48CB /* CheckboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
+		3A36C988282AF469000D48CB /* RenderingSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingSurface.swift; sourceTree = "<group>"; };
 		3ADF8A36282327A400DA5C05 /* TextLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayer.swift; sourceTree = "<group>"; };
 		3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextContentManagerDelegate.swift"; sourceTree = "<group>"; };
 		3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextStorageDelegate.swift"; sourceTree = "<group>"; };
@@ -74,6 +80,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A36C987282AF426000D48CB /* RenderingSurfaces */ = {
+			isa = PBXGroup;
+			children = (
+				3A36C981282A6A75000D48CB /* TextLayoutFragmentView.swift */,
+				3ADF8A4028232BC100DA5C05 /* TextLayoutFragmentLayer.swift */,
+				3A36C988282AF469000D48CB /* RenderingSurface.swift */,
+			);
+			path = RenderingSurfaces;
+			sourceTree = "<group>";
+		};
 		403D657C25099B0700E6E464 = {
 			isa = PBXGroup;
 			children = (
@@ -94,11 +110,12 @@
 		403D658725099B0700E6E464 /* TextInput */ = {
 			isa = PBXGroup;
 			children = (
+				3A36C983282A99FE000D48CB /* CheckboxView.swift */,
 				3ADF8A482825181A00DA5C05 /* String+Extensions.swift */,
 				3ADF8A4628250C4C00DA5C05 /* NSRange+Extensions.swift */,
 				3ADF8A442823903A00DA5C05 /* NSTextRange+Extensions.swift */,
 				3ADF8A3E28232A7800DA5C05 /* TextInputView+TextViewportLayoutControllerDelegate.swift */,
-				3ADF8A4028232BC100DA5C05 /* TextLayoutFragmentLayer.swift */,
+				3A36C987282AF426000D48CB /* RenderingSurfaces */,
 				406B57EC25157A3C006B1353 /* TextInput.entitlements */,
 				403D658825099B0700E6E464 /* AppDelegate.swift */,
 				403D658A25099B0700E6E464 /* SceneDelegate.swift */,
@@ -197,10 +214,12 @@
 				3ADF8A4728250C4C00DA5C05 /* NSRange+Extensions.swift in Sources */,
 				3ADF8A3F28232A7800DA5C05 /* TextInputView+TextViewportLayoutControllerDelegate.swift in Sources */,
 				3ADF8A4128232BC100DA5C05 /* TextLayoutFragmentLayer.swift in Sources */,
+				3A36C984282A99FE000D48CB /* CheckboxView.swift in Sources */,
 				403D65A5250C4F1B00E6E464 /* TextInputView+TextInput.swift in Sources */,
 				403D658D25099B0700E6E464 /* ViewController.swift in Sources */,
 				403D65A3250C4E4900E6E464 /* TextInputView+KeyInput.swift in Sources */,
 				403D658925099B0700E6E464 /* AppDelegate.swift in Sources */,
+				3A36C989282AF469000D48CB /* RenderingSurface.swift in Sources */,
 				403D65A1250AA47A00E6E464 /* TextRange.swift in Sources */,
 				403D659D250AA40000E6E464 /* TextInputView.swift in Sources */,
 				3ADF8A3D2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift in Sources */,
@@ -210,6 +229,7 @@
 				3ADF8A492825181A00DA5C05 /* String+Extensions.swift in Sources */,
 				3ADF8A4B2825D0E800DA5C05 /* TextLayoutFragment.swift in Sources */,
 				3ADF8A4328238D9100DA5C05 /* TextInputView+TextLayoutManagerDelegate.swift in Sources */,
+				3A36C982282A6A75000D48CB /* TextLayoutFragmentView.swift in Sources */,
 				3ADF8A452823903A00DA5C05 /* NSTextRange+Extensions.swift in Sources */,
 				403D659F250AA45F00E6E464 /* TextPosition.swift in Sources */,
 				403D658B25099B0700E6E464 /* SceneDelegate.swift in Sources */,

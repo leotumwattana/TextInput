@@ -7,9 +7,19 @@
 
 import UIKit
 
-class TextLayoutFragmentLayer: CALayer {
+final class TextLayoutFragmentLayer: CALayer, RenderingSurface {
+    
+    // ==================
+    // MARK: - Properties
+    // ==================
     
     var layoutFragment: NSTextLayoutFragment
+    
+    var shouldRemove: Bool = false
+    
+    // ============
+    // MARK: - Init
+    // ============
     
     init(layoutFragment: NSTextLayoutFragment) {
         self.layoutFragment = layoutFragment
@@ -31,14 +41,26 @@ class TextLayoutFragmentLayer: CALayer {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // ==================
+    // MARK: - Animations
+    // ==================
+    
     override class func defaultAction(forKey event: String) -> CAAction? {
         // Suppress default opacity animations.
         return NSNull()
     }
     
+    // ============
+    // MARK: - Draw
+    // ============
+    
     override func draw(in ctx: CGContext) {
         layoutFragment.draw(at: .zero, in: ctx)
     }
+    
+    // ==============
+    // MARK: - Layout
+    // ==============
     
     func updateGeometry() {
         bounds = layoutFragment.renderingSurfaceBounds
@@ -47,7 +69,6 @@ class TextLayoutFragmentLayer: CALayer {
             x: -bounds.origin.x / bounds.size.width,
             y: -bounds.origin.y / bounds.size.height
         )
-        
         position = layoutFragment.layoutFragmentFrame.origin
     }
 }

@@ -12,6 +12,7 @@ class TextInputView: UIScrollView {
     // MARK: UITextInput properties
     //
     var inputDelegate: UITextInputDelegate?
+    
     var selectedTextRange: UITextRange? {
         willSet(newSelectedTextRange) {
             print("\(#function): current = \(String(describing: selectedTextRange))")
@@ -22,6 +23,7 @@ class TextInputView: UIScrollView {
             inputDelegate?.selectionDidChange(self)
         }
     }
+    
     var markedTextRange: UITextRange?
     var markedTextStyle: [NSAttributedString.Key : Any]?
     lazy var tokenizer: UITextInputTokenizer = {
@@ -35,7 +37,7 @@ class TextInputView: UIScrollView {
     let textContainer = NSTextContainer(size: .zero)
     
     private(set) var contentLayer: CALayer = TextLayer()
-    internal var fragmentLayerMap: NSMapTable<NSTextLayoutFragment, CALayer>
+    var fragmentRenderingSurfaceMap: NSMapTable<NSTextLayoutFragment, AnyObject>
     
     // MARK: Floating Cursor
     //
@@ -61,7 +63,7 @@ class TextInputView: UIScrollView {
         let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)]
         let string = NSAttributedString(string: "1234567890", attributes: attributes)
         
-        fragmentLayerMap = .weakToWeakObjects()
+        fragmentRenderingSurfaceMap = .weakToWeakObjects()
         super.init(frame: frame)
         
         textContentStorage.performEditingTransaction {
