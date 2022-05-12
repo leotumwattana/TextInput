@@ -398,6 +398,8 @@ extension TextInputView: UITextInput {
          
          In order to see if we are tapping as oppose to dragging the caret,
          we check to see if `UITextMultiTapRecognizer` is active.
+         
+         TODO: Check with DTS to see if there is a better solution to this.
          */
             
         let isTextMultiTapActive = !(gestureRecognizers ?? [])
