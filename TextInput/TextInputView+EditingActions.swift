@@ -27,8 +27,6 @@ extension TextInputView {
             return false
         case #selector(delete(_:)):
             return hasNonEmptySelectedTextRange
-        case #selector(select(_:)):
-            return true
         case #selector(selectAll(_:)):
             return selectedTextRange != nil
         default:
@@ -72,11 +70,6 @@ extension TextInputView {
         {
             replace(selectedTextRange, withText: "")
         }
-    }
-    
-    override func select(_ sender: Any?) {
-        print("*** \(#function): should select")
-        // TODO
     }
     
     override func selectAll(_ sender: Any?) {
