@@ -30,7 +30,7 @@ extension TextInputView {
         case #selector(select(_:)):
             return true
         case #selector(selectAll(_:)):
-            return true
+            return selectedTextRange != nil
         default:
             return super.canPerformAction(action, withSender: sender)
         }
@@ -80,8 +80,7 @@ extension TextInputView {
     }
     
     override func selectAll(_ sender: Any?) {
-        print("*** \(#function): should select all")
-        // TODO
+        selectedTextRange = textRange(from: beginningOfDocument, to: endOfDocument)
     }
     
 }
