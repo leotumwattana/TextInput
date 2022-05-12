@@ -35,7 +35,6 @@ extension TextInputView {
     }
     
     override func cut(_ sender: Any?) {
-        print("*** \(#function): should cut")
         if let selectedTextRange = selectedTextRange,
            !selectedTextRange.isEmpty
         {
@@ -46,7 +45,6 @@ extension TextInputView {
     }
     
     override func copy(_ sender: Any?) {
-        print("*** \(#function): should copy")
         if let selectedTextRange = selectedTextRange,
            !selectedTextRange.isEmpty
         {
@@ -56,7 +54,6 @@ extension TextInputView {
     }
     
     override func paste(_ sender: Any?) {
-        print("*** \(#function): should paste")
         let pasteboard = UIPasteboard.general
         if let string = pasteboard.string {
             insertText(string)
@@ -64,7 +61,6 @@ extension TextInputView {
     }
     
     override func delete(_ sender: Any?) {
-        print("*** \(#function): should delete")
         if let selectedTextRange = selectedTextRange,
            !selectedTextRange.isEmpty
         {
