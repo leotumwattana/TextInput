@@ -342,6 +342,8 @@ extension TextInputView: UITextInput {
     // MARK: Geometry Methods
     //
     func closestPosition(to point: CGPoint) -> UITextPosition? {
+        guard let textStorage = textContentStorage.textStorage else { return nil }
+        
         let nav = textLayoutManager.textSelectionNavigation
         
         guard let textLayoutFragment = textLayoutManager.textLayoutFragment(for: point)
@@ -381,13 +383,40 @@ extension TextInputView: UITextInput {
             return nil
         }
         
-        let string = textContentStorage.textStorage!.string
-        let s = string.index(string.startIndex, offsetBy: index)
-        let c = string[s]
         
-        if c == "\n" {
-            index -= 1
-            print("*** \(#function): minIndex: \(minIndex) maxIndex: \(maxIndex) index: \(index)")
+        /*
+         Ugly workaround:
+         Seems like when we tap behind a paragraph, the newline character is
+         taken into account and hence we return a position after the newline
+         character, which then moves our caret to the beginning of the next
+         paragraph. However, this is not the case when dragging the caret
+         around, nor when we use the software keyboard's space bar to move the
+         caret.
+         
+         So, here we're checking to see if we have to adjust for the newline
+         character when we are tapping to adjust for it.
+         
+         In order to see if we are tapping as oppose to dragging the caret,
+         we check to see if `UITextMultiTapRecognizer` is active.
+         */
+            
+        let isTextMultiTapActive = !(gestureRecognizers ?? [])
+            .filter { $0.state == .began }
+            .filter {
+                NSStringFromClass(type(of: $0)).nsString.hasPrefix("UITextMultiTapRecognizer")
+            }
+            .isEmpty
+        
+        if isTextMultiTapActive && index < textStorage.length {
+            // Find the character at index
+            let charRange = NSRange(location: index, length: 1)
+            let char = textStorage.string.nsString.substring(with: charRange)
+            
+            // If character is a newline, then offset the index by -1 to ignore
+            // the newline character
+            if char == "\n" {
+                index -= 1
+            }
         }
         
         return TextPosition(value: index)
