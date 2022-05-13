@@ -177,8 +177,45 @@ extension TextInputView: UITextInput {
         case .left:
             let newPosition = TextPosition(position: position, offset: -offset)
             return newPosition < beginningOfDocument as! TextPosition ? beginningOfDocument : newPosition
-        default:
-            return nil
+        case .down, .up:
+            var navigationDirection: NSTextSelectionNavigation.Direction
+            if direction == .down {
+                navigationDirection = offset >= 0 ? .down : .up
+            } else {
+                navigationDirection = offset >= 0 ? .up : .down
+            }
+            
+            let nav = textLayoutManager.textSelectionNavigation
+            
+            let textLocation = textContentStorage.location(textContentStorage.documentRange.location, offsetBy: position.value)!
+            var textSelection = NSTextSelection(textLocation, affinity: .upstream)
+            
+            (0..<abs(offset)).forEach { _ in
+                if let newLocation = nav.destinationSelection(
+                    for: textSelection,
+                    direction: navigationDirection,
+                    destination: .character,
+                    extending: false,
+                    confined: false
+                )?.textRanges.first?.location {
+                    textSelection = NSTextSelection(newLocation, affinity: .upstream)
+                }
+            }
+            
+            guard let destinationLocation = textSelection.textRanges.first?.location else { return nil }
+            let index = textContentStorage.offset(from: textContentStorage.documentRange.location, to: destinationLocation)
+            let newPosition = TextPosition(value: index)
+            
+            if newPosition < beginningOfDocument as! TextPosition {
+                return beginningOfDocument as! TextPosition
+            } else if newPosition > endOfDocument as! TextPosition {
+                return endOfDocument as! TextPosition
+            } else {
+                return newPosition
+            }
+            
+        @unknown default:
+            fatalError()
         }
     }
     
