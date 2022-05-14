@@ -509,7 +509,9 @@ extension TextInputView: UITextInput {
 // =======================
 
 extension TextInputView {
+    
     func beginFloatingCursor(at point: CGPoint) {
+        
         guard let position = closestPosition(to: point) else { return }
         let caretRect = caretRect(for: position)
         floatingCursorView.frame = caretRect
@@ -518,6 +520,8 @@ extension TextInputView {
         addSubview(floatingCursorView)
         
         _caretRectForFloatingCursor = caretRect
+        
+        set(caretColor: .black.withAlphaComponent(0.32))
         
         let anim = UIViewPropertyAnimator(duration: 0.2, dampingRatio: 1) {
             self.floatingCursorView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
@@ -559,6 +563,21 @@ extension TextInputView {
             floatingCursorView.removeFromSuperview()
             floatingCursorView.transform = .identity
         }
+        set(caretColor: .systemBlue)
         _caretRectForFloatingCursor = nil
+    }
+    
+    /*
+     This is a very hacky way to find the caret view so we can change the caret
+     color for floating cursor implementation.
+     TODO: Check with DTS to see if we can find a better way to handle this.
+     Submitted Bug Report to FB10018311.
+     */
+    private var textSelectionView: UIView? {
+        subviews.first { NSStringFromClass(type(of: $0)) == "UITextSelectionView" }
+    }
+    
+    private func set(caretColor color: UIColor) {
+        textSelectionView?.subviews.forEach { $0.backgroundColor = color }
     }
 }
