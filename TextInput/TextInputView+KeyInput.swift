@@ -28,9 +28,9 @@ extension TextInputView: UIKeyInput {
         print("\(#function)")
         guard let textStorage = textContentStorage.textStorage,
             let rangeToReplace = (markedTextRange ?? selectedTextRange) as? TextRange,
-            let nsRangeToReplace = rangeToReplace.nsRange(in: textStorage.string) else {
-            return
-        }
+            let nsRangeToReplace = rangeToReplace.nsRange(in: textStorage.string)
+        else { return }
+        
         let attributedText = NSAttributedString(string: text, attributes: typingAttributes)
         inputDelegate?.textWillChange(self)
         textContentStorage.performEditingTransaction {
