@@ -302,30 +302,13 @@ extension TextInputView: UITextInput {
     //
     func firstRect(for range: UITextRange) -> CGRect {
         print("\(#function): range = \(range)")
-        
-        guard let textStorage = textContentStorage.textStorage
-        else { fatalError() }
-        
-        guard let textRange = range as? TextRange else {
-            fatalError("\(#function): The type of `range` isn't TextRange.")
-        }
-        
-        guard let nsRange = textRange.nsRange(in: textStorage.string)
-        else{ return .zero }
-        
-        guard let nsTextRange = NSTextRange(nsRange, in: textContentStorage)
+
+        guard let selectionRect = selectionRects(
+            for: range
+        ).first as? TextSelectionRect
         else { return .zero }
         
-        var rect = CGRect.zero
-        textLayoutManager.enumerateTextSegments(
-            in: nsTextRange,
-            type: .selection
-        ) { _, textSegmentFrame, baselinePosition, textContainer in
-            rect = convert(textSegmentFrame, to: nil)
-            return false
-        }
-        
-        return rect
+        return selectionRect.rect
     }
     
     var documentRange: NSTextRange {
