@@ -166,7 +166,7 @@ extension TextInputView: UITextInput {
     }
     
     func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? {
-        print("\(#function): from = \(position),in = \(direction), offset = \(offset)")
+        print("\(#function): from = \(position), in = \(direction), offset = \(offset)")
         guard let position = position as? TextPosition
         else { return nil }
         
