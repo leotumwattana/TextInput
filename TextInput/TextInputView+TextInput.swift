@@ -39,9 +39,8 @@ extension TextInputView: UITextInput {
             textStorage.replaceCharacters(in: nsRange, with: text)
         }
         inputDelegate?.textDidChange(self)
-
         let newEnd = TextPosition(position: textRange.start, offset: text.count)
-        selectedTextRange = TextRange(start: textRange.start, end: newEnd)
+        selectedTextRange = TextRange(start: newEnd, end: newEnd)
     }
         
     // MARK: Working with Marked and Selected Text
