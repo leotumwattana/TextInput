@@ -169,7 +169,7 @@ extension TextInputView: UITextInput {
         guard let position = position as? TextPosition
         else { return nil }
         
-        switch direction { // This sample only supports left-to-right text direction.
+        switch direction {
         case .right:
             let newPosition = TextPosition(position: position, offset: offset)
             return newPosition > endOfDocument as! TextPosition ? endOfDocument : newPosition
