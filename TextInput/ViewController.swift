@@ -35,6 +35,7 @@ class ViewController: UIViewController {
         
         let interaction = UITextInteraction(for: .editable)
         interaction.textInput = textInputView
+        interaction.delegate = textInputView
         textInputView.addInteraction(interaction)
     }
 

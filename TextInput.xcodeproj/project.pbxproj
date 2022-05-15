@@ -12,6 +12,7 @@
 		3A36C989282AF469000D48CB /* RenderingSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C988282AF469000D48CB /* RenderingSurface.swift */; };
 		3A36C98B282C5584000D48CB /* TextInputView+EditingActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C98A282C5584000D48CB /* TextInputView+EditingActions.swift */; };
 		3A36C98D282E4244000D48CB /* UITextLayoutDirection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C98C282E4244000D48CB /* UITextLayoutDirection+Extensions.swift */; };
+		3ABC14992831B91E004B43A7 /* TextInputView+TextInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABC14982831B91E004B43A7 /* TextInputView+TextInteractionDelegate.swift */; };
 		3ADF8A37282327A400DA5C05 /* TextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A36282327A400DA5C05 /* TextLayer.swift */; };
 		3ADF8A39282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */; };
 		3ADF8A3B2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */; };
@@ -44,6 +45,7 @@
 		3A36C988282AF469000D48CB /* RenderingSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingSurface.swift; sourceTree = "<group>"; };
 		3A36C98A282C5584000D48CB /* TextInputView+EditingActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+EditingActions.swift"; sourceTree = "<group>"; };
 		3A36C98C282E4244000D48CB /* UITextLayoutDirection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextLayoutDirection+Extensions.swift"; sourceTree = "<group>"; };
+		3ABC14982831B91E004B43A7 /* TextInputView+TextInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextInteractionDelegate.swift"; sourceTree = "<group>"; };
 		3ADF8A36282327A400DA5C05 /* TextLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLayer.swift; sourceTree = "<group>"; };
 		3ADF8A38282328C900DA5C05 /* TextInputView+TextContentManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextContentManagerDelegate.swift"; sourceTree = "<group>"; };
 		3ADF8A3A2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInputView+TextStorageDelegate.swift"; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		403D657C25099B0700E6E464 = {
 			isa = PBXGroup;
 			children = (
+				3ABC14982831B91E004B43A7 /* TextInputView+TextInteractionDelegate.swift */,
 				3A36C98C282E4244000D48CB /* UITextLayoutDirection+Extensions.swift */,
 				40991DF9251912570063E55E /* README.md */,
 				403D658725099B0700E6E464 /* TextInput */,
@@ -230,6 +233,7 @@
 				3A36C989282AF469000D48CB /* RenderingSurface.swift in Sources */,
 				403D65A1250AA47A00E6E464 /* TextRange.swift in Sources */,
 				403D659D250AA40000E6E464 /* TextInputView.swift in Sources */,
+				3ABC14992831B91E004B43A7 /* TextInputView+TextInteractionDelegate.swift in Sources */,
 				3ADF8A3D2823298100DA5C05 /* TextInputView+TextContentStorageDelegate.swift in Sources */,
 				3ADF8A3B2823291700DA5C05 /* TextInputView+TextStorageDelegate.swift in Sources */,
 				3ADF8A37282327A400DA5C05 /* TextLayer.swift in Sources */,
