@@ -59,14 +59,14 @@ class TextInputView: UIScrollView {
     override init(frame: CGRect) {
         markedTextStyle = [NSAttributedString.Key.backgroundColor: UIColor.lightGray]
 
-        // Test data
-        let attributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)]
-        let content = String(repeating: "1234567890\n", count: 50)
-        let string = NSAttributedString(string: content, attributes: attributes)
-        
         fragmentRenderingSurfaceMap = .weakToWeakObjects()
         super.init(frame: frame)
         
+        // Test data
+        let attributes = typingAttributes
+        let content = String(repeating: "Testing testing testing testing testing\n", count: 50)
+        let string = NSAttributedString(string: content, attributes: attributes)
+
         textContentStorage.performEditingTransaction {
             textContentStorage.textStorage?.insert(string, at: 0)
         }
@@ -115,3 +115,13 @@ class TextInputView: UIScrollView {
         layer.setNeedsLayout()
     }
 }
+
+extension TextInputView {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            textLayoutManager.addRenderingAttribute(.foregroundColor, value: UIColor.label, for: textLayoutManager.documentRange)
+        }
+    }
+}
+

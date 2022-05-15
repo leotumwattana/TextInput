@@ -9,14 +9,17 @@ import UIKit
 
 extension TextInputView: UIKeyInput {
     
-    private var typingAttributes: [NSAttributedString.Key : Any] {
+    var typingAttributes: [NSAttributedString.Key : Any] {
         let font = UIFont.boldSystemFont(ofSize: 24)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
         
-        let attributes = [NSAttributedString.Key.font: font,
-                          NSAttributedString.Key.foregroundColor: UIColor.label,
-                          NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: UIColor.label,
+            .paragraphStyle: paragraphStyle
+        ]
+        
         return attributes
     }
     
