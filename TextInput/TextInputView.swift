@@ -97,6 +97,7 @@ class TextInputView: UIScrollView {
     override var canResignFirstResponder: Bool {
         return true
     }
+    override var canBecomeFocused: Bool { true }
 
     override func layoutSubviews() {
         super.layoutSubviews()
