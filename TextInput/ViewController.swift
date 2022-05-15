@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         textInputView = TextInputView()
-        textInputView.backgroundColor = .systemYellow
+//        textInputView.backgroundColor = .systemYellow
         view.addSubview(textInputView)
         
         // Set up auto layout constraints
