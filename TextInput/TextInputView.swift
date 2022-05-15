@@ -117,8 +117,14 @@ class TextInputView: UIScrollView {
 extension TextInputView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            textLayoutManager.addRenderingAttribute(.foregroundColor, value: UIColor.label, for: textLayoutManager.documentRange)
+        if traitCollection.hasDifferentColorAppearance(
+            comparedTo: previousTraitCollection
+        ) {
+            textLayoutManager.addRenderingAttribute(
+                .foregroundColor,
+                value: UIColor.label,
+                for: textLayoutManager.documentRange
+            )
         }
     }
 }
