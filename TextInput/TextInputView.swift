@@ -90,13 +90,10 @@ class TextInputView: UIScrollView {
 
     // MARK: Overridables
     //
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
+    override var canBecomeFirstResponder: Bool { true }
 
-    override var canResignFirstResponder: Bool {
-        return true
-    }
+    override var canResignFirstResponder: Bool { true }
+    
     override var canBecomeFocused: Bool { true }
 
     override func layoutSubviews() {
