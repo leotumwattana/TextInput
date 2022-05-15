@@ -93,7 +93,9 @@ final class TextLayoutFragmentView: UIView, RenderingSurface {
     // ===============
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if checkboxView.frame.contains(point) { return checkboxView }
+        if checkboxView.frame.insetBy(dx: -8, dy: -8).contains(point) {
+            return checkboxView
+        }
         return nil
     }
 }
